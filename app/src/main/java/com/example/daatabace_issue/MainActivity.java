@@ -3,21 +3,19 @@ package com.example.daatabace_issue;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.AdapterView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {//implements AdapterView.OnItemSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -27,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         menu.add(1, 4, 300, "Credit");
         return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         Intent intent = WhereToGo(item.getTitle().toString());
@@ -35,10 +32,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         return super.onOptionsItemSelected(item);
     }
-
     public Intent WhereToGo(String item){
         return new Intent(this, Adder.class);
     }
-
 
 }

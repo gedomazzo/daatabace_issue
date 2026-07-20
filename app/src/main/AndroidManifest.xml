@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
         <activity
+            android:name=".Shower"
+            android:exported="false" />
+        <activity
             android:name=".Adder"
             android:exported="true">
             <intent-filter>

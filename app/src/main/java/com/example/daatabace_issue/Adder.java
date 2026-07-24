@@ -34,15 +34,15 @@ public class Adder extends MainActivity implements AdapterView.OnItemSelectedLis
     private String Sdes, Smon, Sdat;
     private int Scat;
     private final String[] categories = {"select category:", "food", "clothes", "electronics", "drugs", "other"};
-    DataBace Adb;
+    //private DataBace Adb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         UiMerrage();
-        InitializeSQLiteDatabace();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, categories){
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, categories){
             @Override
             public boolean isEnabled(int position) {
                 return position != 0;
@@ -53,11 +53,6 @@ public class Adder extends MainActivity implements AdapterView.OnItemSelectedLis
     }
 
 
-    private void InitializeSQLiteDatabace(){
-        HelperDB hlp = new HelperDB(this);
-        SQLiteDatabase db = hlp.getReadableDatabase();
-        Adb = new SQLHendler(db, hlp, this);
-    }
 
 
     public void Push(View view) {
@@ -65,23 +60,21 @@ public class Adder extends MainActivity implements AdapterView.OnItemSelectedLis
         Smon = mon.getText().toString();
         Sdat = date.getText().toString();
         id ++;
-        if (Sdes.equals("") || Smon.equals("") || Sdat.equals("") || Scat == 0 || CheckDate(Sdat)){
+        if (GoodToPush(Sdes, Smon, Sdat, Scat)) Adb.Write(Sdes, Smon, Scat, Sdat, id);
+        else {
             AlertDialog.Builder err = new AlertDialog.Builder(this);
-
             err.setTitle("Oops, something is wrong");
             err.setMessage("Please check your input");
             err.setPositiveButton("Ok", (dialogInterface, i) -> {
                 dialogInterface.cancel();
             });
             err.show();
-
-            return;
         }
-
-        Adb.Write(Sdes, Smon, Scat, Sdat, id);
     }
 
-
+    private boolean GoodToPush(@NonNull String des, String mon, String date, int cat){
+        return !(des.equals("") || mon.equals("") || date.equals("") || cat == 0 || CheckDate(date));
+    }
     public void UiMerrage(){
         des = findViewById(R.id.des2);
         mon = findViewById(R.id.mon);
@@ -94,22 +87,6 @@ public class Adder extends MainActivity implements AdapterView.OnItemSelectedLis
         boolean res = super.onCreateOptionsMenu(menu);
         menu.removeItem(1);
         return res;
-    }
-    @Override
-    public Intent WhereToGo(String item){
-
-        Intent intent = new Intent(this, MainActivity.class);
-
-        if (item.equals("Show")) {
-            intent = new Intent(this, Shower.class);
-        } else if (item.equals("Filter")) {
-            //intent = new Intent(this, Filter.class);
-        } else {
-            //intent = new Intent(this, Credits.class);
-        }
-        startActivity(intent);
-
-        return intent;
     }
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Scat = pos;

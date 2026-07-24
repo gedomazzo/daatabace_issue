@@ -24,39 +24,33 @@ import com.example.daatabace_issue.SQLite.SQLHendler;
 
 import java.util.ArrayList;
 
-public class Shower extends MainActivity implements AdapterView.OnItemClickListener{
+public class Shower extends MainActivity implements AdapterView.OnItemClickListener {
     private ListView dshow;
     private ArrayList<String> tbl = new ArrayList<>();
     private ArrayAdapter<String> adp;
     private AlertDialog.Builder allert;
-    DataBace Adb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show);
         UiMerrage();
-        InitializeSQLiteDatabace();
+
         tbl = Adb.Read(null, null, -1, -1);
         adp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, tbl);
         dshow.setOnItemClickListener(this);
         dshow.setAdapter(adp);
     }
 
-    private void InitializeSQLiteDatabace(){
-        HelperDB hlp = new HelperDB(this);
-        SQLiteDatabase db = hlp.getReadableDatabase();
-        Adb = new SQLHendler(db, hlp, this);
-    }
 
 
-    public void UiMerrage(){
+    public void UiMerrage() {
         dshow = findViewById(R.id.dshow);
     }
 
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int pos, long id){
+    public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
         String tble = tbl.get(pos);
 
         allert = new AlertDialog.Builder(this);
@@ -67,7 +61,8 @@ public class Shower extends MainActivity implements AdapterView.OnItemClickListe
         allert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Adb.delete(pos);
+                int id = Integer.parseInt(tble.split(",")[0]);
+                Adb.delete(id-1);
                 tbl.remove(pos);
                 adp.notifyDataSetChanged();
             }
@@ -86,25 +81,9 @@ public class Shower extends MainActivity implements AdapterView.OnItemClickListe
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         boolean res = super.onCreateOptionsMenu(menu);
         menu.removeItem(2);
         return res;
     }
-    @Override
-    public Intent WhereToGo(String item){
-        Intent intent = new Intent(this, MainActivity.class);
-
-        if (item.equals("Add")) {
-            intent = new Intent(this, Adder.class);
-        } else if (item.equals("Filter")) {
-            //intent = new Intent(this, Filter.class);
-        } else {
-             //intent = new Intent(this, Credits.class);
-        }
-        startActivity(intent);
-
-        return intent;
-    }
-
 }

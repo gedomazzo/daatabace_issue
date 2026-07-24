@@ -8,9 +8,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {//implements AdapterView.OnItemSelectedListener{
 
+    public DataBace Adb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DataBaceInitializer dBI = new DataBaceInitializer();
+        Adb = dBI.InitializeSQLiteDatabace(this);
+
+
 
     }
 
@@ -33,7 +39,21 @@ public class MainActivity extends AppCompatActivity {//implements AdapterView.On
         return super.onOptionsItemSelected(item);
     }
     public Intent WhereToGo(String item){
-        return new Intent(this, Adder.class);
+        Intent intent = new Intent(this, MainActivity.class);
+
+        if (item.equals("Show")) {
+            intent = new Intent(this, Shower.class);
+        } else if (item.equals("Filter")) {
+            //intent = new Intent(this, Filter.class);
+        } else if (item.equals("Add")) {
+            intent = new Intent(this, Adder.class);
+        } else {
+            //intent = new Intent(this, Credits.class);}
+        }
+        finish();
+        startActivity(intent);
+
+        return intent;
     }
 
 }
